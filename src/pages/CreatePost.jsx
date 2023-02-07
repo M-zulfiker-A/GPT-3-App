@@ -12,6 +12,15 @@ const CreatePost = () => {
     prompt : '',
     photo : ''
   })
+  const handleChange =()=>{
+
+  }
+  const handleSubmit =()=>{
+
+  }
+  const handleSurpriseMe = () =>{
+
+  }
   return (
     <section className='max-width-7xl mx-auto'>
       <div>
@@ -35,7 +44,30 @@ const CreatePost = () => {
             placeholder = "a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art"
             value = {form.prompt}
             handleChange={handleChange}
+            isSurpriseMe
+            handleSurpriseMe ={handleSurpriseMe}
           />
+          <div className='relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:rong-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center'>
+            {form.photo ? (
+              <img 
+                src={form.photo}
+                alt={form.prompt}
+                className='w-full h-full object-contain opacity-40'
+              />
+            ) : (
+              <img
+                src={preview}
+                alt="preview"
+                className='w-9/12 h-9/12 object-contain opacity-40'
+              />
+            )}
+
+            {postLoading && (
+              <div className='absolute inset-0 z-0 flex justify-center items-center bg-black rounded-lg'>
+                <Loader />
+              </div>
+            )}
+          </div>
         </div>
       </form>
       </div>
