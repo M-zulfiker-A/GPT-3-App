@@ -1,8 +1,9 @@
 import React from 'react'
 
-const Cards = () => {
+const Cards = ({key , Posts}) => {
+  console.log(Posts.photo)
   return (
-    <div>Cards</div>
+    <img src={Posts.photo} />
   )
 }
 

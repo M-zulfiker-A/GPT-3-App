@@ -13,18 +13,61 @@ const CreatePost = () => {
     photo : ''
   })
   const [loading,setLoading] = useState(false)
-  const handleChange =(e)=> {
+  const handleChange= (e) => {
     setForm({...form , [e.target.name] : e.target.value})
   }
-  const handleSubmit =()=>{
+  const handleSubmit =async (e) => {
+    e.preventDefault();
+    if(!form.photo || !form.prompt) alert("Please Generate a Photo before trying to share")
+    setLoading(true)
+    try {
+      const postsData = await fetch('http://localhost:8000/api/v1/post',
+      {
+        method : "POST",
+        headers : {
+        'Content-Type' : 'application/json',
+        },
+        body : JSON.stringify(form)
+      })
+      const posts = await postsData.json()
+      console.log(posts)
+      navigate("/")
+    } catch (error) {
+      alert(error)
+    } finally {
+      setLoading(false)
+    }
 
   }
   const handleSurpriseMe = () =>{
     const randomPrompt = getRandomPrompts(form.prompt)
     setForm({...form, prompt : randomPrompt})
   }
-  const generateImage = () =>{
-    setpostLoading(true)
+  const generateImage = async() =>{
+    if(form.prompt){
+      setpostLoading(true)
+      try{
+        const image = await fetch("http://localhost:8000/api/v1/dalle",
+          {
+            method : 'POST',
+            headers : {
+              'Content-Type' : 'application/json',
+            },
+            body : JSON.stringify({prompt : form.prompt})
+          }
+        )
+        const Imagedata = await image.json()
+        console.log(Imagedata)
+        setForm({...form , photo : `data:image/jpeg;base64,${Imagedata.photo}`})
+      }catch(err){
+        alert(err)
+      }finally{
+        setpostLoading(false)
+      }
+      
+    }else{
+      alert("please enter a Prompt")
+    }
   }
   return (
     <section className='max-width-7xl mx-auto'>
@@ -46,6 +89,7 @@ const CreatePost = () => {
           <FormField 
             LabelName="Prompt"
             type = "text"
+            name = 'prompt'
             placeholder = "a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art"
             value = {form.prompt}
             handleChange={handleChange}
@@ -57,7 +101,7 @@ const CreatePost = () => {
               <img 
                 src={form.photo}
                 alt={form.prompt}
-                className='w-full h-full object-contain opacity-40'
+                className='w-full h-full object-contain'
               />
             ) : (
               <img
@@ -78,7 +122,7 @@ const CreatePost = () => {
           <button 
             type='button'
             onClick={generateImage}
-            className='text-white text-sm w-full sm:w:atuo px-5 py-2.5 bg-green-700 rounded-md font-medium'>
+            className='text-white text-sm w-full sm:w:auto px-5 py-2.5 bg-green-700 rounded-md font-medium'>
               {postLoading ? 'Genrating...' : 'Generate'}
           </button>
         </div>

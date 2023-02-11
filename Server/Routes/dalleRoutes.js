@@ -29,6 +29,7 @@ router.route("/")
                 photo : Image
             })
         } catch (error) {
+            console.log(error.response.data)
             res.status(500).send(error?.response.data.error.message)
         }
     })

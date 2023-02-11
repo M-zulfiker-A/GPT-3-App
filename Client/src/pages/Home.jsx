@@ -3,11 +3,32 @@ import  {Cards , Loader , FormField} from "../Components"
 const Home = () => {
   const [Loading , setLoading ] = useState(false)
   const [searchText, setsearchText] = useState("")
-  const [allPosts , setallPosts] = useState(null)
+  const [allPosts , setallPosts] = useState([])
+
+  useEffect(()=>{
+    (async function fetchdata(){
+      try {
+        setLoading(true)
+        const Postsdata = await fetch('http://localhost:8000/api/v1/post',
+        {
+          method : "GET",
+          headers : {
+          'Content-Type' : 'application/json',
+          },
+        })
+        const Posts = await Postsdata.json()
+        setallPosts(Posts.data)
+      } catch (error) {
+        alert("Error Loading Posts"+ error)
+      }finally{
+        setLoading(false)
+      }
+    })()
+  },[])
 
   const RenderBody = ({data, title}) => {
     if(data.length > 0){
-      return data.map(post => <Cards key={post._id} {...post} />)
+      return data.map(post => <Cards key={post._id} Posts = {post}/>)
     }
     return(
       <h2 className='mt-5 font-bold text-[#6339ff] text-xl uppercase'>
@@ -42,7 +63,7 @@ const Home = () => {
                     title = "No Search Results Found"
                   /> :
                   <RenderBody 
-                    data= {[]}
+                    data = {allPosts}
                     title="No Posts Found"
                   />
               }
