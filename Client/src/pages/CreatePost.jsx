@@ -21,7 +21,7 @@ const CreatePost = () => {
     if(!form.photo || !form.prompt) alert("Please Generate a Photo before trying to share")
     setLoading(true)
     try {
-      const postsData = await fetch('http://localhost:8000/api/v1/post',
+      const postsData = await fetch('https://gpt3-myapp.onrender.com/api/v1/post',
       {
         method : "POST",
         headers : {
@@ -47,7 +47,7 @@ const CreatePost = () => {
     if(form.prompt){
       setpostLoading(true)
       try{
-        const image = await fetch("http://localhost:8000/api/v1/dalle",
+        const image = await fetch("https://gpt3-myapp.onrender.com/api/v1/dalle",
           {
             method : 'POST',
             headers : {
@@ -122,7 +122,7 @@ const CreatePost = () => {
           <button 
             type='button'
             onClick={generateImage}
-            className='text-white text-sm w-full sm:w:auto px-5 py-2.5 bg-green-700 rounded-md font-medium'>
+            className='text-white text-sm w-full sm:w-auto px-5 py-2.5 bg-green-700 rounded-md font-medium'>
               {postLoading ? 'Genrating...' : 'Generate'}
           </button>
         </div>

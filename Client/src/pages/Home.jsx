@@ -9,15 +9,18 @@ const Home = () => {
     (async function fetchdata(){
       try {
         setLoading(true)
-        const Postsdata = await fetch('http://localhost:8000/api/v1/post',
+        const Postsdata = await fetch('https://gpt3-myapp.onrender.com/api/v1/post',
         {
           method : "GET",
           headers : {
           'Content-Type' : 'application/json',
           },
         })
-        const Posts = await Postsdata.json()
-        setallPosts(Posts.data)
+        if(Postsdata.ok){
+          const Posts = await Postsdata.json()
+          setallPosts(Posts.data.reverse())
+        }
+        
       } catch (error) {
         alert("Error Loading Posts"+ error)
       }finally{
@@ -28,7 +31,7 @@ const Home = () => {
 
   const RenderBody = ({data, title}) => {
     if(data.length > 0){
-      return data.map(post => <Cards key={post._id} Posts = {post}/>)
+      return data.map(post => <Cards key={post._id} {...post}/>)
     }
     return(
       <h2 className='mt-5 font-bold text-[#6339ff] text-xl uppercase'>
