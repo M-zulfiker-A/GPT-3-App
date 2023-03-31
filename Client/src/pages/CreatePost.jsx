@@ -30,7 +30,6 @@ const CreatePost = () => {
         body : JSON.stringify(form)
       })
       const posts = await postsData.json()
-      console.log(posts)
       navigate("/")
     } catch (error) {
       alert(error)
@@ -57,7 +56,6 @@ const CreatePost = () => {
           }
         )
         const Imagedata = await image.json()
-        console.log(Imagedata)
         setForm({...form , photo : `data:image/jpeg;base64,${Imagedata.photo}`})
       }catch(err){
         alert(err)
@@ -74,7 +72,7 @@ const CreatePost = () => {
       <div>
       <div>
         <h1 className='font-extrabold text-black text-[2rem]'>Create Images</h1>
-        <p className='mt-2 text-[#666e75] text-[1rem] max-w-[500px]'>Create your pwn beautiful images with the help of Dall - E AI</p>
+        <p className='mt-2 text-[#666e75] text-[1rem] max-w-[500px]'>Create your own beautiful images with the help of Dall - E AI</p>
       </div>
       <form className='mt-16 max-w-3xl' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-5'>
